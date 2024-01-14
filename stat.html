@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MMS303</title>
+  <link href="styles/main.css" rel="stylesheet" />
+  <link href="styles/meteo.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.0/Chart.bundle.min.js"></script>
+</head>
+
+<body onLoad="search()">
+  <header>
+    <div id="identite">
+      <a href="index.html" style="color: #000">
+        <img id="logo" src="img/logo.png" alt="Logo" />
+        <h2>Accueil</h2>
+      </a>
+      <nav id="menu-header">
+        <a href="meteo.html">Meteo</a>
+        <a href="stat.html">Statistiques</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="option">
+      <span><b>Ville : </b><input type="text" placeholder="Ville" id="city" value="Saint-Lô"
+          onchange="search()" /></span>
+    </div>
+    <div>
+      <form id="period">
+        choisissez une perdiode :
+        <label for="Date début">Date debut :</label>
+        <input type="date" id="start" name="dateDebut" />
+
+        <label for="Date Fin">Date de fin :</label>
+        <input type="date" id="end" name="dateDeFin" />
+
+        <input type="submit" id="val" value="Valider" />
+      </form>
+    </div>
+    <hr />
+
+    <section>
+      <div class="day yad">
+        <canvas id="myChart"></canvas>
+        <p id="weatherresult"></p>
+      </div>
+    </section>
+    <div class="option">
+      <span><b>Ville : </b><input type="text" placeholder="Ville" id="city2" value="Saint-Lô"
+          onchange="search()" /></span>
+    </div>
+    <div>
+      <form id="period2">
+        choisissez une perdiode :
+        <label for="Date début">Date :</label>
+        <input type="date" id="début" name="dateDebut" />
+        <input type="submit" id="val2" value="Valider" />
+      </form>
+    </div>
+    <hr />
+    <section>
+      <div class="day yad">
+        <canvas id="myChart2"></canvas>
+      </div>
+    </section>
+    <section>
+      <div class="day yad">
+        <canvas id="myChart3"></canvas>
+      </div>
+    </section>
+    <section>
+      <div class="day yad">
+        <canvas id="myChart4"></canvas>
+      </div>
+    </section>
+
+    <script>
+      var tab;
+      var tab2;
+      var tab3;
+      var tab4;
+      console.log(typeof tab2);
+
+      var button = document.querySelector("#val");
+      var p = document.createElement("p");
+      p.innerHTML = "Moyennes des statistiques sur la periode sélectionnée.";
+      button.after(p);
+      p.style = "color : red";
+
+      var button = document.querySelector("#val2");
+      var p = document.createElement("p");
+      p.innerHTML = "Statistiques sur la journée sélectionnée";
+      button.after(p);
+      p.style = "color : red";
+
+      var city = document.getElementById("city").value;
+      var latitude, longitude;
+
+      document
+        .getElementById("period")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const start = document.getElementById("start").value;
+          const end = document.getElementById("end").value;
+          if (start && end) {
+            getStatData(start, end);
+          }
+        });
+
+      document
+        .getElementById("period2")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const start = document.getElementById("début").value;
+          const end = document.getElementById("début").value;
+          if (start && end) {
+            getStatData(start, end);
+          }
+        });
+
+      function search() {
+        var city = document.getElementById("city").value;
+        var city2 = document.getElementById("city2").value;
+
+        const apiurl = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=fr&format=json`;
+        fetch(apiurl)
+          .then((fetcher) => fetcher.json())
+          .then((json) => {
+            if (json.results.length > 0) {
+              const cityname = (document.getElementById("city").innerHTML =
+                city);
+              latitude = json.results[0].latitude;
+              longitude = json.results[0].longitude;
+              return dataweather(latitude, longitude);
+            } else {
+              displayerrormessage("Ville non trouvée.");
+              return Promise.reject("Ville non trouvée.");
+            }
+          })
+          .catch((error) => {
+            console.error(
+              "Erreur lors de la récupération des données:",
+              error,
+            );
+            displayerrormessage("Error");
+            return Promise.reject(error);
+          });
+
+        const apiurl2 = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=fr&format=json`;
+        fetch(apiurl2)
+          .then((fetcher) => fetcher.json())
+          .then((json) => {
+            if (json.results.length > 0) {
+              const cityname = (document.getElementById("city2").innerHTML =
+                city);
+              latitude = json.results[0].latitude;
+              longitude = json.results[0].longitude;
+              return dataweather(latitude, longitude);
+            } else {
+              displayerrormessage("Ville non trouvée.");
+              return Promise.reject("Ville non trouvée.");
+            }
+          })
+          .catch((error) => {
+            console.error(
+              "Erreur lors de la récupération des données:",
+              error,
+            );
+            displayerrormessage("Error");
+            return Promise.reject(error);
+          });
+      }
+
+      function dataweather(latitude, longitude) {
+        const apiurl2 = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,dew_point_2m,apparent_temperature,precipitation_probability,precipitation,rain,showers,snowfall,weather_code,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,visibility,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index,uv_index_clear_sky,is_day&daily=uv_index_max,weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,daylight_duration,precipitation_sum,rain_sum,showers_sum,precipitation_hours,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max&timezone=auto`;
+        return fetch(apiurl2)
+          .then((response) => response.json())
+          .then((data) => {
+            displayweatherdata(data);
+            return data;
+          })
+          .catch((error) => {
+            console.error(
+              "Erreur lors de la récupération des données:",
+              error,
+            );
+            displayerrormessage("Error");
+            return Promise.reject(error);
+          });
+      }
+      console.log(latitude);
+
+      function displayerrormessage(message) {
+        const weatherresult = document.getElementById("weatherresult");
+        weatherresult.innerHTML = `<p>${message}</p>`;
+      }
+      function getStatData(start, end) {
+        const apiurl3 = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitude}&longitude=${longitude}&start_date=${start}&end_date=${end}&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,precipitation,rain,snowfall,snow_depth,weather_code,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=uv_index_max,weather_code,temperature_2m_max,temperature_2m_min,temperature_2m_mean,apparent_temperature_max,apparent_temperature_min,apparent_temperature_mean,sunrise,sunset,daylight_duration,sunshine_duration,precipitation_sum,rain_sum,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant&timezone=auto`;
+        return fetch(apiurl3)
+          .then((response) => response.json())
+          .then((histo) => {
+            displayStatData(histo);
+            return histo;
+          })
+          .catch((error) => {
+            console.error(
+              "Erreur lors de la récupération des données météo:",
+              error,
+            );
+            displayerrormessage(
+              "Une erreur s'est produite. Veuillez réessayer.",
+            );
+            return Promise.reject(error);
+          });
+      }
+
+      function displayStatData(histo) {
+        let Moy2m = histo.daily.temperature_2m_mean;
+        let somme = Moy2m.reduce((a, b) => a + b, 0);
+        let moyenne = somme / Moy2m.length;
+
+        if (typeof tab != "undefined") {
+          tab.destroy();
+        }
+
+        var vitesse_du_vent = [0, 0, 0, 0, 0, 0, 0];
+        console.log(vitesse_du_vent);
+
+        for (var i = 0; i < histo.daily.time.length; i++) {
+          vitesse_du_vent[0] += histo.daily.wind_speed_10m_max[i];
+          vitesse_du_vent[1] += histo.daily.precipitation_sum[i];
+          vitesse_du_vent[2] += histo.daily.temperature_2m_max[i];
+          vitesse_du_vent[3] += histo.daily.temperature_2m_min[i];
+          vitesse_du_vent[4] += histo.daily.apparent_temperature_max[i];
+          vitesse_du_vent[5] += histo.daily.apparent_temperature_min[i];
+          vitesse_du_vent[6] += histo.daily.daylight_duration[i] / 3600;
+          //vitesse_du_vent[7]/=histo.daily.uv_index.length; -> présent dans l'api et dans daily mais ne fonctionne pas
+        }
+        vitesse_du_vent[0] /= histo.daily.wind_speed_10m_max.length;
+        vitesse_du_vent[1] /= histo.daily.precipitation_sum.length;
+        vitesse_du_vent[2] /= histo.daily.temperature_2m_max.length;
+        vitesse_du_vent[3] /= histo.daily.temperature_2m_min.length;
+        vitesse_du_vent[4] /= histo.daily.apparent_temperature_max.length;
+        vitesse_du_vent[5] /= histo.daily.apparent_temperature_min.length;
+        vitesse_du_vent[6] /= histo.daily.daylight_duration.length;
+        //vitesse_du_vent[7]/=histo.daily.uv_index.length;
+
+        console.log("ici");
+        console.log(vitesse_du_vent);
+
+        const ctx = document.getElementById("myChart");
+
+        tab = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Moy vitesse du vent en Kmh",
+              "Moyennes des précipitations en mm",
+              "Moyenne temperatures max",
+              "Moyenne temperatures min",
+              "durée moyenne des jours",
+              "Moyenne temp min ressenties",
+              "Moyenne temp max ressenties",
+            ],
+            datasets: [
+              {
+                labels: ["Vitesse du vent en Kmh"],
+
+                label: ["Statistiques moyennes"],
+                data: vitesse_du_vent,
+                borderWidth: 1,
+                backgroundColor: [
+                  "lightblue",
+                  "crimson",
+                  "lightgreen",
+                  "red",
+                  "orange",
+                  "purple",
+                  "yellow",
+                ],
+              },
+            ],
+          },
+
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+      function displayweatherdata(data) {
+        if (typeof tab2 != "undefined") {
+          tab2.destroy();
+          tab3.destroy();
+          tab4.destroy();
+        }
+
+        const temperature = data.hourly.temperature_2m.slice(0, 24);
+        const apparent_temperature = data.hourly.apparent_temperature.slice(
+          0,
+          24,
+        );
+        const uv_index = data.hourly.uv_index.slice(0, 24);
+        const cloud_cover = data.hourly.cloud_cover.slice(0, 24);
+        const wind_speed_10m = data.hourly.wind_speed_10m.slice(0, 24);
+
+        console.log(temperature);
+        console.log(apparent_temperature);
+
+        const ctx2 = document.getElementById("myChart2");
+
+        tab2 = new Chart(ctx2, {
+          type: "bar",
+          data: {
+            labels: data.hourly.time.slice(0, 24),
+            datasets: [
+              {
+                label: "température",
+                data: temperature,
+                backgroundColor: "orange",
+              },
+              {
+                label: "température ressentie",
+                data: apparent_temperature,
+                backgroundColor: "lightblue",
+              },
+            ],
+          },
+
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+
+        const ctx3 = document.getElementById("myChart3");
+
+        tab3 = new Chart(ctx3, {
+          type: "bar",
+          data: {
+            labels: data.hourly.time.slice(0, 24),
+            datasets: [
+              {
+                label: "Indice UV",
+                data: uv_index,
+                backgroundColor: "red",
+              },
+            ],
+          },
+
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+
+        const ctx4 = document.getElementById("myChart4");
+
+        tab4 = new Chart(ctx4, {
+          type: "bar",
+          data: {
+            labels: data.hourly.time.slice(0, 24),
+            datasets: [
+              {
+                label: "Vitesse du vent en Kmh",
+                data: wind_speed_10m,
+                backgroundColor: "green",
+              },
+            ],
+          },
+
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+    </script>
+
+    <button onclick="search()"><i class="fa fa-rotate-left"></i></button>
+  </main>
+
+  <footer>
+    <nav id="legal">
+      <p>© Copyright - Meteo MMI 2023</p>
+      <a href="misc/legal.html">Mentions légales</a>
+      <a href="misc/privacy.html">Politique de confidentialité</a>
+    </nav>
+  </footer>
+</body>
+
+</html>

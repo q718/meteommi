@@ -1,0 +1,269 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins");
+
+body {
+  --bg: #ccc;
+  --rad: 5px;
+  --fx: drop-shadow(0 4px 5px #999);
+  font-family: "Poppins";
+  background: var(--bg);
+  margin: 0;
+}
+
+header {
+  background: #000000;
+  height: 55px;
+  filter: var(--fx);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  margin: 15px auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+}
+
+section {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.day {
+  background: #c1c1c1;
+  border-radius: 15px;
+  padding: 20px;
+  width: fit-content;
+  transition: ease-in-out .4s;
+  border: 1px solid #c1c1c1;
+}
+
+.yad {
+  flex-grow: 1;
+  text-align: center;
+  overflow-x: auto;
+}
+
+.day>*:not(:last-child) {
+  margin: 0 0 15px 0
+}
+
+.day>h3 {
+  text-align: center;
+  color: #999;
+  transition: ease-in-out .4s;
+}
+
+.day:hover {
+  border: 1px solid #000
+}
+
+.day:hover>h3 {
+  color: #000
+}
+
+.day:hover i {
+  color: #fff
+}
+
+.card {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+i {
+  color: #ddd;
+  transition: ease-in-out .4s;
+}
+
+button>i {
+  color: #000
+}
+
+.mini>.card,
+.sub>.card {
+  justify-content: space-around;
+}
+
+.sub>.card {
+  margin-bottom: 15px;
+  margin-top: 5px;
+}
+
+.card>b {
+  color: #aaa
+}
+
+.v {
+  text-align: left;
+  background: #bbb;
+  margin: auto;
+  padding: 1px 15px;
+  border-radius: var(--rad) var(--rad) 0 0;
+  border: 1px solid #aaa;
+  border-bottom: 0;
+  min-width: max-content;
+  max-width: 100%;
+}
+
+.v>p>b {
+  color: #888
+}
+
+#illu {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+img {
+  max-height: 105px;
+}
+
+.mini {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.mini>* {
+  background: var(--bg);
+  filter: var(--fx);
+  border-radius: var(--rad);
+  padding: 10px;
+  margin: 0 0 10px 0;
+  height: 100%;
+  border: 1px solid transparent;
+  ;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  transition: ease-in-out .4s;
+}
+
+.day:hover .mini>* {
+  border: 1px solid #fff;
+}
+
+.mini>p {
+  margin: 0
+}
+
+.sub {
+  padding: 0 15px;
+  border-radius: var(--rad);
+  box-shadow: 5px 5px 5px #bbb,
+    -5px -5px 5px #c7c7c7;
+  flex-grow: 1;
+}
+
+.card>p {
+  margin: 0
+}
+
+#wmo {
+  text-align: center;
+  width: 100%;
+  color: #fff;
+  font-size: smaller;
+}
+
+button {
+  background: var(--bg);
+  padding: 20px;
+  border-radius: var(--rad);
+  border: 0;
+  width: 100%;
+  transition: ease-in-out .4s;
+  border: 1px dashed #999;
+}
+
+button:hover:before {
+  content: "Rafraîchir "
+}
+
+button:hover {
+  background: #fff;
+  filter: var(--fx);
+  border: 1px solid #fff;
+}
+
+button:active {
+  text-decoration: underline;
+  filter: none;
+  border: 1px solid #000;
+}
+
+@media (max-width:860px),
+(orientation: portrait) {
+  section {
+    flex-direction: column
+  }
+
+  .day {
+    width: auto
+  }
+
+  .card {
+    flex-direction: column
+  }
+
+  .mini>.card,
+  .sub>.card {
+    flex-direction: row;
+  }
+
+  .v {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  #illu {
+    margin: auto
+  }
+
+  .mini,
+  .sub {
+    margin: 0
+  }
+
+  .mini>.card {
+    justify-content: space-between;
+  }
+
+  button {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: auto !important;
+    z-index: 1;
+  }
+
+  h4 {
+    text-align: left;
+    color: #888;
+    transition: ease-in-out .4s;
+  }
+
+  .day:hover h4 {
+    color: #000
+  }
+
+  .yad {
+    overflow-x: hidden
+  }
+}
+
+footer {
+  position: relative
+}

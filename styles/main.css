@@ -1,0 +1,112 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins");
+
+body {
+  --bg: #ccc;
+  --rad: 5px;
+  --fx: drop-shadow(0 4px 5px #999);
+  font-family: "Poppins";
+  background: var(--bg);
+  margin: 0;
+}
+
+/* HEADER */
+header #identite {
+  position: relative;
+  display: block;
+  background-color: rgb(0, 162, 255);
+  height: 60px;
+  width: 100%;
+  top: 0;
+}
+
+header img {
+  position: relative;
+  height: 45px;
+  width: 45px;
+  left: 10px;
+  top: 8px;
+}
+
+header h2 {
+  position: fixed;
+  left: 70px;
+  top: -7px;
+}
+
+header nav {
+  position: fixed;
+  display: flex;
+  right: 20px;
+  top: 18px;
+}
+
+header nav>a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: black;
+}
+
+/* FIN CSS HEADER*/
+
+
+main {
+  margin: 15px auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+@media (orientation: portrait) {
+  .day {
+    width: auto
+  }
+
+  .card {
+    flex-direction: column
+  }
+
+  .mini {
+    margin: 10px 0 0 0
+  }
+
+  button {
+    position: fixed;
+    bottom: 75px;
+    right: 15px;
+    width: auto !important;
+  }
+}
+
+/* FOOTER*/
+footer {
+  background-color: rgb(165, 165, 165);
+  color: white;
+  text-align: center;
+  position: fixed;
+  margin-top: 50px;
+  bottom: 0;
+  width: 100%;
+  padding: 15px 0;
+}
+
+#legal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#legal p {
+  margin: 0;
+  color: black;
+}
+
+#legal a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+  color: black;
+}
+
+#legal a:hover {
+  text-decoration: underline;
+}

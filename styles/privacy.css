@@ -1,0 +1,14 @@
+.confidentialite {
+  margin-top: 90px;
+  margin-bottom: 90px;
+}
+
+header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
+
+main {
+  max-width: 100%;
+}

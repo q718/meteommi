@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MMS303</title>
+  <link rel="icon" href="img/icons/Clair.png" />
+  <link href="styles/main.css" rel="stylesheet" />
+  <link href="styles/meteo.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+  <script src="script.js"></script>
+</head>
+
+<body onLoad="search()">
+  <header>
+    <div id="identite">
+      <a href="index.html" style="color: #000">
+        <img id="logo" src="img/logo.png" alt="Logo" />
+        <h2>Accueil</h2>
+      </a>
+      <nav id="menu-header">
+        <a href="meteo.html">Meteo</a>
+        <a href="stat.html">Statistiques</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="option">
+      <span><b>Ville : </b><input type="text" placeholder="Ville" id="city" value="Saint-Lô" onchange="search()" />
+        <input id="time" type="datetime-local" disabled /></span>
+      <select id="unit" onchange="search()">
+        <option value="celsius" selected="selected">Celsius</option>
+        <option value="fahrenheit">Fahrenheit</option>
+      </select>
+    </div>
+    <hr />
+
+    <section>
+      <div class="day">
+        <h3>Météo actuelle</h3>
+        <div class="card">
+          <span id="illu"></span>
+          <span class="mini">
+            <h2 id="tm"></h2>
+            <p id="at"></p>
+          </span>
+        </div>
+        <div class="card">
+          <span class="sub">
+            <p id="di"></p>
+            <p id="vi"></p>
+            <p id="ra"></p>
+          </span>
+          <span class="sub">
+            <p id="vt"></p>
+          </span>
+        </div>
+        <div class="card">
+          <span class="sub">
+            <p id="rh"></p>
+          </span>
+          <span class="sub">
+            <p id="pr"></p>
+          </span>
+        </div>
+        <hr />
+        <div class="card">
+          <p id="wmo"></p>
+        </div>
+      </div>
+
+      <div class="day yad">
+        <h3>Météo du jour</h3>
+        <div class="card">
+          <span class="sub">
+            <h4>Matin</h4>
+            <span class="mini">
+              <span class="card">
+                <p id="mat2"></p>
+                <p id="maat"></p>
+              </span>
+              <span class="card"><b>COUVERTURE</b>
+                <p id="malo"></p>
+                <p id="mami"></p>
+                <p id="mahi"></p>
+              </span>
+            </span>
+            <span class="card">
+              <p id="marh"></p>
+              <p id="masd"></p>
+            </span>
+            <span class="mini">
+              <span class="card">
+                <p id="maui"></p>
+                <p id="maum"></p>
+              </span>
+              <span class="card"><b>VENT</b>
+                <p id="mawd"></p>
+                <p id="maws"></p>
+                <p id="mawg"></p>
+              </span>
+            </span>
+          </span>
+
+          <span class="sub">
+            <h4>Midi</h4>
+            <span class="mini">
+              <span class="card">
+                <p id="mit2"></p>
+                <p id="miat"></p>
+              </span>
+              <span class="card">
+                <p id="milo"></p>
+                <p id="mimi"></p>
+                <p id="mihi"></p>
+              </span>
+            </span>
+            <span class="card">
+              <p id="mirh"></p>
+              <p id="misd"></p>
+            </span>
+            <span class="mini">
+              <span class="card">
+                <p id="miui"></p>
+                <p id="mium"></p>
+              </span>
+              <span class="card">
+                <p id="miwd"></p>
+                <p id="miws"></p>
+                <p id="miwg"></p>
+              </span>
+            </span>
+          </span>
+
+          <span class="sub">
+            <h4>Après-midi</h4>
+            <span class="mini">
+              <span class="card">
+                <p id="apt2"></p>
+                <p id="apat"></p>
+              </span>
+              <span class="card">
+                <p id="aplo"></p>
+                <p id="apmi"></p>
+                <p id="aphi"></p>
+              </span>
+            </span>
+            <span class="card">
+              <p id="aprh"></p>
+              <p id="apsd"></p>
+            </span>
+            <span class="mini">
+              <span class="card">
+                <p id="apui"></p>
+                <p id="apum"></p>
+              </span>
+              <span class="card">
+                <p id="apwd"></p>
+                <p id="apws"></p>
+                <p id="apwg"></p>
+              </span>
+            </span>
+          </span>
+
+          <span class="sub">
+            <h4>Soir</h4>
+            <span class="mini">
+              <span class="card">
+                <p id="sot2"></p>
+                <p id="soat"></p>
+              </span>
+              <span class="card">
+                <p id="solo"></p>
+                <p id="somi"></p>
+                <p id="sohi"></p>
+              </span>
+            </span>
+            <span class="card">
+              <p id="sorh"></p>
+              <p id="sosd"></p>
+            </span>
+            <span class="mini">
+              <span class="card">
+                <p id="soui"></p>
+                <p id="soum"></p>
+              </span>
+              <span class="card">
+                <p id="sowd"></p>
+                <p id="sows"></p>
+                <p id="sowg"></p>
+              </span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="day yad">
+        <h3>Météo de la semaine</h3>
+        <div class="card">
+          <span class="sub">
+            <h4 id="d1"></h4>
+            <p id="i1"></p>
+            <p id="t1" class="mini"></p>
+            <p id="tt1"></p>
+            <div class="v">
+              <p><b>VENT</b></p>
+              <p id="v1"></p>
+              <p id="vv1"></p>
+              <p id="vvv1"></p>
+            </div>
+          </span>
+          <span class="sub">
+            <h4 id="d2"></h4>
+            <p id="i2"></p>
+            <p id="t2" class="mini"></p>
+            <p id="tt2"></p>
+            <div class="v">
+              <p><b>VENT</b></p>
+              <p id="v2"></p>
+              <p id="vv2"></p>
+              <p id="vvv2"></p>
+            </div>
+          </span>
+          <span class="sub">
+            <h4 id="d3"></h4>
+            <p id="i3"></p>
+            <p id="t3" class="mini"></p>
+            <p id="tt3"></p>
+            <div class="v">
+              <p><b>VENT</b></p>
+              <p id="v3"></p>
+              <p id="vv3"></p>
+              <p id="vvv3"></p>
+            </div>
+          </span>
+          <span class="sub">
+            <h4 id="d4"></h4>
+            <p id="i4"></p>
+            <p id="t4" class="mini"></p>
+            <p id="tt4"></p>
+            <div class="v">
+              <p><b>VENT</b></p>
+              <p id="v4"></p>
+              <p id="vv4"></p>
+              <p id="vvv4"></p>
+            </div>
+          </span>
+          <span class="sub">
+            <h4 id="d5"></h4>
+            <p id="i5"></p>
+            <p id="t5" class="mini"></p>
+            <p id="tt5"></p>
+            <div class="v">
+              <p><b>VENT</b></p>
+              <p id="v5"></p>
+              <p id="vv5"></p>
+              <p id="vvv5"></p>
+            </div>
+          </span>
+          <span class="sub">
+            <h4 id="d6"></h4>
+            <p id="i6"></p>
+            <p id="t6" class="mini"></p>
+            <p id="tt6"></p>
+            <div class="v">
+              <p><b>VENT</b></p>
+              <p id="v6"></p>
+              <p id="vv6"></p>
+              <p id="vvv6"></p>
+            </div>
+        </div>
+        </span>
+      </div>
+      </div>
+    </section>
+
+    <button onclick="search()"><i class="fa fa-rotate-left"></i></button>
+  </main>
+
+  <footer>
+    <nav id="legal">
+      <p>© Copyright - Meteo MMI 2023</p>
+      <a href="misc/legal.html">Mentions légales</a>
+      <a href="misc/privacy.html">Politique de confidentialité</a>
+    </nav>
+  </footer>
+</body>
+
+</html>
